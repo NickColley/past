@@ -17,17 +17,18 @@
     "url": "git+https://github.com/NickColley/past.git"
   },
   "homepage": "https://github.com/NickColley/past#readme",
-  "dependencies": {
-    "express": "^4.18.1"
-  },
   "engines": {
     "node": "^16.14.2"
+  },
+  "dependencies": {
+    "express": "^4.18.1"
   },
   "devDependencies": {
     "eslint": "^8.22.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^4.2.1"
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.7.1"
   },
   "eslintConfig": {
     "extends": [
