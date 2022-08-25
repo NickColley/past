@@ -1,19 +1,20 @@
-import { join, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
+import { join } from "node:path";
 import express from "express";
 
-const main = ({ pagesDirectory = "." } = {}) => {
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = dirname(__filename);
-
+const main = ({ currentDirectory = ".", pagesDirectory = "." } = {}) => {
   const app = express();
 
   console.log(
-    `Looking for an index.html file in ${join(__dirname, pagesDirectory)}.`
+    `Looking for an index.html file in ${join(
+      currentDirectory,
+      pagesDirectory
+    )}.`
   );
 
   app.get("/", (request, response) => {
-    response.sendFile(join(__dirname, pagesDirectory, "pages", "index.html"));
+    response.sendFile(
+      join(currentDirectory, pagesDirectory, "pages", "index.html")
+    );
   });
 
   return app;
