@@ -1,8 +1,12 @@
 {
   "name": "past",
   "version": "0.0.1",
+  "type": "module",
   "description": "Next.js inspired opinionated framework focusing on the boring past",
   "main": "index.js",
+  "bin": {
+    "past": "cli.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,5 +15,11 @@
     "type": "git",
     "url": "git+https://github.com/NickColley/past.git"
   },
-  "homepage": "https://github.com/NickColley/past#readme"
+  "homepage": "https://github.com/NickColley/past#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  },
+  "engines": {
+    "node": "^16.14.2"
+  }
 }
