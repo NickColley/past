@@ -26,16 +26,25 @@ async function fileSystemRouter(rootPathName) {
       .replace(rootPathName, "/")
       .replace("//", "/"); // TODO do this better...
     let routeName = normalizedPath ? normalizedPath : "/";
-    const nameWithoutExtension = name.replace(extname(name), "");
+    const extension = extname(name);
+    const nameWithoutExtension = name.replace(extension, "");
     if (nameWithoutExtension !== "index") {
       routeName = join(routeName, nameWithoutExtension);
     }
 
+    routeName = routeName.replace(/\[/g, ":").replace(/\]/g, "");
+
     if (!routes[routeName]) {
-      routes[routeName] = {};
+      routes[routeName] = [];
     }
     routes[routeName].path = pathName;
-    routes[routeName].file = name;
+    if (extension === ".js") {
+      routes[routeName].controller = name;
+    } else if (extension === ".njk") {
+      routes[routeName].template = name;
+    } else {
+      routes[routeName].file = name;
+    }
   });
   return routes;
 }

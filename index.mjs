@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import app from "./app.js";
+import app from "./app.mjs";
 
 const { argv } = process;
 const pagesDirectory = argv[2];
