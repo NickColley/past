@@ -49,7 +49,7 @@ function registerRoutes(app, routes) {
       if (file) {
         return response.sendFile(join(path, file));
       }
-      if (method === "GET") {
+      if (locals) {
         return response.send(locals);
       }
       next();

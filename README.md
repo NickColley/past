@@ -48,7 +48,7 @@ pages
 
 ```javascript
 // file:pages/index.js
-export default ({ params: id }) => `ID: ${id}`;
+export default ({ params: { id } }) => `ID: ${id}`;
 ```
 
 ## Post
@@ -62,7 +62,7 @@ pages
 // file:pages/index.js
 export const get = () =>
   `<form method="post"><button name="id" value="1234">Submit</button></form>`;
-export const post = ({ body: id }) => `Form posted, id: ${id}`;
+export const post = ({ body: { id } }) => `Form posted, id: ${id}`;
 ```
 
 See [./examples](./examples) for full list of examples.
