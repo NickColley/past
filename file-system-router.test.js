@@ -42,7 +42,7 @@ async function suite() {
 
   test("should mount nested/index.html at /nested", async (assert) => {
     const fileSystemRouter = await setup(
- e     {
+      {
         "index.html": "Hello, World.",
       },
       "fixtures/nested/"
