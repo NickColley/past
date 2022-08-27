@@ -1,0 +1,56 @@
+{% extends "../layouts/main.njk" %}
+
+{% from "node_modules/govuk-frontend/govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "node_modules/govuk-frontend/govuk/components/input/macro.njk" import govukInput %}
+{% from "node_modules/govuk-frontend/govuk/components/button/macro.njk" import govukButton %}
+
+{% block pageTitle %}
+    {{ "Error: " if errorSummary.length }}Sign in | {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {% if errorSummary.length %}
+                {{ govukErrorSummary({
+                    titleText: "There is a problem",
+                    errorList: errorSummary
+                }) }}
+            {% endif %}
+            <h1 class="govuk-heading-l">Sign in</h1>
+            <form method="post" novalidate>
+                {{ govukInput({
+                    classes: "govuk-input--width-20",
+                    label: {
+                        text: "Email"
+                    },
+                    id: "email",
+                    name: "email",
+                    errorMessage: errors["email"],
+                    value: email,
+                    autocomplete: "off",
+                    spellcheck: false
+                }) }}
+                {{ govukInput({
+                    classes: "govuk-input--width-20",
+                    label: {
+                        text: "Password"
+                    },
+                    id: "password",
+                    name: "password",
+                    type: "password",
+                    errorMessage: errors["password"],
+                    value: password,
+                    autocomplete: "off",
+                    spellcheck: false
+                }) }}
+                {{ govukButton({
+                    text: "Sign in"
+                }) }}
+                <p class="govuk-body govuk-!-margin-top-5">
+                    <a class="govuk-link" href="/forgot">Forgot your password?</a>
+                </p>
+            </form>
+        </div>
+    </div>
+{% endblock %}

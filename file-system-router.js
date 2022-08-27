@@ -28,17 +28,33 @@ async function fileSystemRouter(rootPathName) {
     let routeName = normalizedPath ? normalizedPath : "/";
     const extension = extname(name);
     const nameWithoutExtension = name.replace(extension, "");
-    if (nameWithoutExtension !== "index") {
+    if (
+      nameWithoutExtension !== "index" &&
+      !nameWithoutExtension.endsWith(".client")
+    ) {
       routeName = join(routeName, nameWithoutExtension);
     }
 
     routeName = routeName.replace(/\[/g, ":").replace(/\]/g, "");
 
+    // Merge client files into parent route
+    if (nameWithoutExtension.endsWith(".client")) {
+      routeName = routeName.replace(".client", "");
+    }
+
     if (!routes[routeName]) {
       routes[routeName] = [];
     }
     routes[routeName].path = pathName;
-    if (extension === ".js" || extension === ".mjs") {
+    if (nameWithoutExtension.endsWith(".client")) {
+      if (extension === ".js") {
+        routes[routeName].javascript = name;
+      }
+    } else if (extension === ".scss") {
+      routes[routeName].scss = name;
+    } else if (extension === ".css") {
+      routes[routeName].css = name;
+    } else if (extension === ".js" || extension === ".mjs") {
       routes[routeName].controller = name;
     } else if (extension === ".njk") {
       routes[routeName].template = name;

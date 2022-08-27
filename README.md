@@ -2,6 +2,8 @@
 
 Next.js inspired opinionated framework focusing on the past
 
+Development state: this is mostly a toy project to experiment, it'd fallover in production.
+
 Assuming a folder of structure of:
 
 ```bash

@@ -1,0 +1,8 @@
+{
+  "private": "true",
+  "name": "govuk",
+  "version": "1.0.0",
+  "dependencies": {
+    "govuk-frontend": "^4.3.1"
+  }
+}
