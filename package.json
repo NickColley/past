@@ -1,6 +1,6 @@
 {
   "name": "past",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "type": "module",
   "description": "Next.js inspired opinionated framework focusing on the boring past",
   "main": "index.mjs",
