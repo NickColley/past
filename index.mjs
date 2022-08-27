@@ -12,6 +12,10 @@ const currentDirectory = dirname(fileURLToPath(import.meta.url));
 
 const port = 3000;
 
-app({ currentDirectory, pagesDirectory }).listen(port, () => {
-  console.log(`Application started: http://localhost:${port}`);
-});
+async function main() {
+  (await app({ currentDirectory, pagesDirectory })).listen(port, () => {
+    console.log(`Application started: http://localhost:${port}`);
+  });
+}
+
+main();

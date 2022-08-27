@@ -8,7 +8,8 @@
     "past": "index.mjs"
   },
   "scripts": {
-    "test": "npm run lint",
+    "test": "npm run lint && npm run ava",
+    "ava": "NODE_OPTIONS=--loader=esmock ava",
     "lint": "eslint *.js && prettier --check *.js"
   },
   "license": "MIT",
@@ -24,10 +25,13 @@
     "express": "^4.18.1"
   },
   "devDependencies": {
+    "ava": "^4.3.3",
     "eslint": "^8.22.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "esmock": "^1.9.7",
+    "memfs": "^3.4.7",
     "prettier": "^2.7.1"
   },
   "eslintConfig": {
@@ -42,7 +46,9 @@
     "rules": {
       "prettier/prettier": [
         "error"
-      ]
+      ],
+      "node/no-unpublished-import": "off",
+      "node/no-missing-import": "off"
     }
   }
 }
