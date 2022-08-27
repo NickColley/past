@@ -38,7 +38,7 @@ async function fileSystemRouter(rootPathName) {
       routes[routeName] = [];
     }
     routes[routeName].path = pathName;
-    if (extension === ".js") {
+    if (extension === ".js" || extension === ".mjs") {
       routes[routeName].controller = name;
     } else if (extension === ".njk") {
       routes[routeName].template = name;
