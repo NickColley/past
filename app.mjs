@@ -74,6 +74,7 @@ function registerRoutes(app, routes) {
     }
     if (css) {
       app.get(join(route, css), (request, response, next) => {
+        response.setHeader("content-type", "text/css");
         return response.sendFile(join(path, css));
       });
     }

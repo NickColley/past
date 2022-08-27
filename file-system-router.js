@@ -27,29 +27,23 @@ async function fileSystemRouter(rootPathName) {
       .replace("//", "/"); // TODO do this better...
     let routeName = normalizedPath ? normalizedPath : "/";
     const extension = extname(name);
-    const nameWithoutExtension = name.replace(extension, "");
-    if (
-      nameWithoutExtension !== "index" &&
-      !nameWithoutExtension.endsWith(".client")
-    ) {
+    const nameWithoutExtension = name
+      .replace(extension, "")
+      .replace(".client", "");
+
+    if (nameWithoutExtension !== "index") {
       routeName = join(routeName, nameWithoutExtension);
     }
 
+    // Convert brackets into Express dynamic routes.
     routeName = routeName.replace(/\[/g, ":").replace(/\]/g, "");
-
-    // Merge client files into parent route
-    if (nameWithoutExtension.endsWith(".client")) {
-      routeName = routeName.replace(".client", "");
-    }
 
     if (!routes[routeName]) {
       routes[routeName] = [];
     }
     routes[routeName].path = pathName;
-    if (nameWithoutExtension.endsWith(".client")) {
-      if (extension === ".js") {
-        routes[routeName].javascript = name;
-      }
+    if (name.endsWith(".client.js")) {
+      routes[routeName].javascript = name;
     } else if (extension === ".scss") {
       routes[routeName].scss = name;
     } else if (extension === ".css") {
