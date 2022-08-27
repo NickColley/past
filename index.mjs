@@ -1,15 +1,11 @@
 #!/usr/bin/env node
 
-import { dirname } from "node:path";
-import { fileURLToPath } from "node:url";
-
 import app from "./app.js";
 
 const { argv } = process;
 const pagesDirectory = argv[2];
 
-const currentDirectory = dirname(fileURLToPath(import.meta.url));
-
+const currentDirectory = process.cwd();
 const port = 3000;
 
 async function main() {
