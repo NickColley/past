@@ -4,7 +4,7 @@
   "type": "module",
   "description": "Next.js inspired opinionated framework focusing on the boring past",
   "main": "index.mjs",
-  "bin": "node --loader=hot.mjs index.mjs",
+  "bin": "index.mjs",
   "scripts": {
     "test": "npm run lint && npm run ava",
     "ava": "NODE_OPTIONS=--loader=esmock c8 ava",
