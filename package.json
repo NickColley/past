@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "npm run lint && npm run ava",
-    "ava": "NODE_OPTIONS=--loader=esmock ava",
+    "ava": "NODE_OPTIONS=--loader=esmock c8   ava",
     "lint": "eslint *.js && prettier --check *.js"
   },
   "license": "MIT",
@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "ava": "^4.3.3",
+    "c8": "^7.12.0",
     "eslint": "^8.22.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-node": "^11.1.0",
@@ -55,5 +56,19 @@
       "node/no-unpublished-import": "off",
       "node/no-missing-import": "off"
     }
+  },
+  "c8": {
+    "reporter": [
+      "lcovonly",
+      "text"
+    ],
+    "all": "true",
+    "100": "true",
+    "exclude": [
+      "node_modules/",
+      "examples/",
+      "coverage/",
+      "**/*.test.js"
+    ]
   }
 }
