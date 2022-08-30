@@ -1,3 +1,4 @@
 export default () => ({
-  number: (Math.random() * 100).toFixed(10),
+  heading: "Fruits",
+  fruits: ["apples", "bananas", "pears"],
 });
