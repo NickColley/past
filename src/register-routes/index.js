@@ -1,35 +1,9 @@
-import { join, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
-import { access } from "node:fs/promises";
+import { join } from "node:path";
 
-import express from "express";
-import bodyParser from "body-parser";
 import chalk from "chalk";
-import nunjucks from "nunjucks";
 import sass from "sass";
 import { rollup } from "rollup";
-import { stringReplace } from "string-replace-middleware";
-import fileSystemRouter from "./file-system-router.js";
-
-const PAGES_DIRECTORY = "pages";
 const cacheImports = false;
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-const formatErrorLog = (message, path) => {
-  return (
-    chalk.black.bgRedBright("\nError:") +
-    chalk.redBright.bold(` ${message}\n`).replace(path, chalk.underline(path))
-  );
-};
-
-function handleNoPages(app, error) {
-  const errorPath = error.path.replace(PAGES_DIRECTORY, "");
-  const message = `Could not find a "${PAGES_DIRECTORY}" directory in "${errorPath}".`;
-  console.error(formatErrorLog(message, errorPath));
-  app.get("/", (request, response) => {
-    response.send(message);
-  });
-}
 
 function registerRoutes(app, routes, filePath) {
   Object.keys(routes).forEach(async (route) => {
@@ -118,55 +92,4 @@ function registerRoutes(app, routes, filePath) {
   });
 }
 
-function liveReload(app) {
-  app.get("/__live-reload__", (request, response) => {
-    response.set({
-      "Content-Type": "text/event-stream",
-      "Cache-Control": "no-cache",
-      Connection: "keep-alive",
-    });
-    response.flushHeaders();
-    // Send an initial event to establish a connection
-    response.write(`data: hello\n\n`);
-  });
-  app.get("/__live-reload__/client.js", (request, response) => {
-    response.sendFile(join(__dirname, "live-reload.client.js"));
-  });
-  app.use(
-    stringReplace({
-      "</body>": `<script src="/__live-reload__/client.js"></script>\n</body>`,
-    })
-  );
-}
-
-async function main({ currentDirectory = ".", pagesDirectory = "." } = {}) {
-  const app = express();
-  app.use(bodyParser.urlencoded({ extended: true }));
-
-  const filePath = join(currentDirectory, pagesDirectory);
-  nunjucks.configure(filePath, {
-    autoescape: true,
-    throwOnUndefined: false,
-    trimBlocks: true,
-    lstripBlocks: true,
-    noCache: true, // TODO set depending on environment
-    express: app,
-  });
-  try {
-    console.log(chalk.yellow(`\nLooking for files in "${pagesDirectory}"...`));
-    await access(filePath);
-    const routes = await fileSystemRouter(join(filePath, PAGES_DIRECTORY));
-    liveReload(app);
-    registerRoutes(app, routes, filePath);
-  } catch (error) {
-    if (error.code === "ENOENT") {
-      handleNoPages(app, error);
-    } else {
-      throw error;
-    }
-  }
-
-  return { server: app };
-}
-
-export default main;
+export default registerRoutes;

@@ -4,7 +4,7 @@ import { Volume } from "memfs";
 
 async function setup(files, path) {
   const volume = Volume.fromJSON(files, path);
-  const fileSystemRouter = await esmock("./file-system-router.js", {
+  const fileSystemRouter = await esmock("./index.js", {
     "node:fs/promises": {
       readdir: volume.promisesApi.readdir,
     },
