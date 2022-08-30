@@ -6,23 +6,19 @@ Next.js inspired opinionated framework focusing on the past
 
 > **⚠️✋ Do not use in production: this project is new and may have security and performance issues.**
 
-Assuming a folder of structure of:
+## Quick start
+
+Create a HTML file inside a 'pages' folder.
 
 ```bash
-pages
-└── index.html
+mkdir pages
+echo '<h1>Hello, World</h1>' > pages/index.html
 ```
 
-You can run this to serve it:
+Then see your page by running `npx past`.
 
-```bash
-npx past
-```
+---
 
-Run the help command for all options.
-
-```bash
-npx past --help
-```
+For all options run `npx past --help`.
 
 See [./examples](./examples) for full list of examples.
