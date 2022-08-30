@@ -6,7 +6,7 @@ Web framework for people from the past.
 
 ## Creating a page
 
-Create a `index.html` HTML file inside a 'pages' folder.
+Create a HTML file inside a 'pages' folder.
 
 ```bash
 mkdir pages

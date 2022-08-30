@@ -1,13 +1,12 @@
 {
   "private": "true",
-  "name": "example-govuk",
+  "name": "example-form",
   "version": "1.0.0",
   "scripts": {
     "dev": "past",
     "start": "past --env=production"
   },
   "dependencies": {
-    "govuk-frontend": "^4.3.1",
     "past": "latest"
   }
 }
