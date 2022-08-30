@@ -1,7 +1,7 @@
 export const get = () => {
-  return { number: 1234 };
+  return { heading: "Sign in" };
 };
-export const post = ({ body: { email, password } }) => {
+export const post = ({ body: { email, password } }, response) => {
   let errorSummary = [];
   let errors = {};
   if (!email) {

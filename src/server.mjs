@@ -4,6 +4,7 @@ import { access } from "node:fs/promises";
 import express from "express";
 import bodyParser from "body-parser";
 import compression from "compression";
+import session from "cookie-session";
 import chalk from "chalk";
 import nunjucks from "nunjucks";
 
@@ -20,6 +21,17 @@ async function main({
   environment,
 } = {}) {
   const app = express();
+
+  // TODO: Figure out best practice for production for sessions.
+  app.use(
+    session({
+      name: "session",
+      secret: "development",
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      sameSite: "strict",
+    })
+  );
+
   app.use(bodyParser.urlencoded({ extended: true }));
 
   if (environment === "production") {

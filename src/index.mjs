@@ -17,6 +17,7 @@ const packageJson = JSON.parse(
 );
 
 let pagesDirectory = ".";
+const allowedEnvironments = ["production", "development"];
 let environment = process.env.NODE_ENV || "development";
 let port = 3000;
 
@@ -38,6 +39,15 @@ if (options.pages) {
   pagesDirectory = options.pages;
 }
 if (options.env) {
+  if (!allowedEnvironments.includes(options.env)) {
+    throw new Error(
+      `"${
+        options.env
+      }" is not a valid environment. Allowed environments are ${allowedEnvironments.join(
+        ", "
+      )}.`
+    );
+  }
   environment = options.env;
 }
 
@@ -62,6 +72,17 @@ if (environment === "production") {
   port = await getPort({ port });
   // Development server with file watching and reloading.
   start();
+  console.log(
+    chalk.yellow(`Watching files for changes in "${pagesDirectory}".`)
+  );
+  chokidar
+    .watch(pagesDirectory, {
+      ignored: [join(pagesDirectory, "node_modules")],
+    })
+    .on("change", (file) => {
+      console.log(chalk.blueBright(`File ${file} changed`));
+      restart();
+    });
 }
 
 async function start() {
@@ -91,13 +112,3 @@ function restart() {
     start();
   });
 }
-
-console.log(chalk.yellow(`Watching files for changes in "${pagesDirectory}".`));
-chokidar
-  .watch(pagesDirectory, {
-    ignored: [join(pagesDirectory, "node_modules")],
-  })
-  .on("change", (file) => {
-    console.log(chalk.blueBright(`File ${file} changed`));
-    restart();
-  });

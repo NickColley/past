@@ -35,15 +35,27 @@ function registerRoutes(app, routes, filePath, environment) {
     console.time(registeredLog);
     app.all(route, (request, response, next) => {
       const { method } = request;
-      const locals = controllers[method]
-        ? controllers[method]({
-            params: request.params,
-            body: request.body,
-            query: request.query,
-          })
-        : {};
+
+      let locals = {};
+      if (controllers[method]) {
+        locals = controllers[method](request, response);
+      }
+
+      // Redirect to avoid form re-submission issues.
+      // https://en.wikipedia.org/wiki/Post/Redirect/Get
+      if (method === "POST") {
+        // Persist the locals returned form the post into a session.
+        request.session.__locals__ = locals;
+        return response.redirect(request.url);
+      }
+      if (method === "GET") {
+        // Merge the persisted locals from the post.
+        locals = Object.assign(locals, request.session.__locals__);
+        // Unset session locals now they have been used.
+        request.session.__locals__ = {};
+      }
+
       if (template) {
-        response.setHeader("content-type", "text/html");
         return response.render(join(path, template), locals);
       }
       if (file) {

@@ -5,7 +5,7 @@
 {% from "node_modules/govuk-frontend/govuk/components/button/macro.njk" import govukButton %}
 
 {% block pageTitle %}
-    {{ "Error: " if errorSummary.length }}Sign in | {{ super() }}
+    {{ "Error: " if errorSummary.length }}{{ heading }} | {{ super() }}
 {% endblock %}
 
 {% block content %}
@@ -17,7 +17,7 @@
                     errorList: errorSummary
                 }) }}
             {% endif %}
-            <h1 class="govuk-heading-l">Sign in</h1>
+            <h1 class="govuk-heading-l">{{ heading }}</h1>
             <form method="post" novalidate>
                 {{ govukInput({
                     classes: "govuk-input--width-20",
