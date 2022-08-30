@@ -1,6 +1,6 @@
 # 🌐 past
 
-Next.js inspired opinionated framework focusing on the past
+Web framework for people from the past.
 
 [![past latest npm version](https://img.shields.io/npm/v/past.svg)](https://www.npmjs.com/package/past)
 
@@ -15,10 +15,17 @@ mkdir pages
 echo '<h1>Hello, World</h1>' > pages/index.html
 ```
 
-Then see your page by running `npx past`.
+Then run `npx past`.
 
----
+## Examples
 
-For all options run `npx past --help`.
+Use these examples to start or learn from:
 
-See [./examples](./examples) for full list of examples.
+- [Form](./examples/form/) &ndash; simple form with user input that shows a message.
+- [Nunjucks](./examples/nunjucks/) &ndash; simple Nunjucks page with data.
+- [GOV.UK](./examples/govuk/) &ndash; GOV.UK login form with error messages.
+
+### Thanks to
+
+- [Next.js](https://nextjs.org/) for primary inspiration like the file based routing.
+- [Eleventy](https://www.11ty.dev/) for general approach
