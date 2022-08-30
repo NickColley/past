@@ -51,13 +51,6 @@ if (options.env) {
   environment = options.env;
 }
 
-const app = await server({ currentDirectory, pagesDirectory, environment });
-
-const state = {
-  server: null,
-  sockets: [],
-};
-
 if (environment === "production") {
   console.log(
     chalk.black.bgRedBright("Warning:") +
@@ -65,6 +58,7 @@ if (environment === "production") {
         " past is new and untested in production. It likely has security and performance issues."
       )
   );
+  const app = await server({ currentDirectory, pagesDirectory, environment });
   app.listen(port, () => {
     console.log(
       chalk.blueBright(
@@ -78,6 +72,8 @@ if (environment === "production") {
   port = await getPort({ port });
   // Development server with file watching and reloading.
   start();
+
+  // Watch for file changes and restart the server.
   console.log(
     chalk.yellow(`Watching files for changes in "${pagesDirectory}".`)
   );
@@ -91,7 +87,13 @@ if (environment === "production") {
     });
 }
 
+const state = {
+  server: null,
+  sockets: [],
+};
+
 async function start() {
+  const app = await server({ currentDirectory, pagesDirectory, environment });
   state.server = app.listen(port, () => {
     console.log(
       chalk.blueBright(

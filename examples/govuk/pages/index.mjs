@@ -1,7 +1,7 @@
 export const get = () => {
   return { heading: "Sign in" };
 };
-export const post = ({ body: { email, password } }, response) => {
+export const post = ({ body: { email, password } }) => {
   let errorSummary = [];
   let errors = {};
   if (!email) {

@@ -49,10 +49,16 @@ function registerRoutes(app, routes, filePath, environment) {
         return response.redirect(request.url);
       }
       if (method === "GET") {
-        // Merge the persisted locals from the post.
-        locals = Object.assign(locals, request.session.__locals__);
+        if (request.session.__locals__) {
+          if (typeof request.session.__locals__ === "object") {
+            // Merge the persisted locals from the post.
+            locals = Object.assign(locals, request.session.__locals__);
+          } else {
+            locals = request.session.__locals__;
+          }
+        }
         // Unset session locals now they have been used.
-        request.session.__locals__ = {};
+        request.session.__locals__ = null;
       }
 
       if (template) {
