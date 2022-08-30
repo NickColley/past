@@ -3,12 +3,11 @@
   "version": "0.0.10",
   "type": "module",
   "description": "Next.js inspired opinionated framework focusing on the boring past",
-  "main": "index.mjs",
-  "bin": "index.mjs",
+  "bin": "cli.cjs",
   "scripts": {
     "test": "npm run lint && npm run ava",
     "ava": "NODE_OPTIONS='--no-warnings --loader=esmock' c8 ava",
-    "lint": "eslint *.mjs *.js && prettier --check *.mjs *.js"
+    "lint": "eslint *.mjs *.js *.cjs && prettier --check *.mjs *.js *.cjs"
   },
   "license": "MIT",
   "repository": {

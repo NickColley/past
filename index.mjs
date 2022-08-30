@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import { join } from "node:path";
 import chalk from "chalk";
 import chokidar from "chokidar";
