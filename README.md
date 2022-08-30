@@ -2,7 +2,7 @@
 
 Next.js inspired opinionated framework focusing on the past
 
-Development state: this is mostly a toy project to experiment, it'd fallover in production.
+Development state: this is a toy project to experiment, do not depend on this.
 
 Assuming a folder of structure of:
 
