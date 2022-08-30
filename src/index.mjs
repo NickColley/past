@@ -1,6 +1,7 @@
 import { join } from "node:path";
 import chalk from "chalk";
 import chokidar from "chokidar";
+import getPort from "get-port";
 
 import server from "./server.mjs";
 import { NODE_ENV } from "./constants.js";
@@ -9,7 +10,7 @@ const { argv } = process;
 const pagesDirectory = argv[2] || ".";
 
 const currentDirectory = process.cwd();
-const port = process.env.PORT || 3000;
+let port = process.env.PORT || 3000;
 
 const app = await server({ currentDirectory, pagesDirectory });
 
@@ -27,6 +28,8 @@ if (NODE_ENV === "production") {
     );
   });
 } else {
+  // If already in use use a random port instead.
+  port = await getPort({ port });
   // Development server with file watching and reloading.
   start();
 }
