@@ -7,8 +7,8 @@
   "bin": "index.mjs",
   "scripts": {
     "test": "npm run lint && npm run ava",
-    "ava": "NODE_OPTIONS=--loader=esmock c8 ava",
-    "lint": "eslint *.js && prettier --check *.js"
+    "ava": "NODE_OPTIONS='--no-warnings --loader=esmock' c8 ava",
+    "lint": "eslint *.mjs *.js && prettier --check *.mjs *.js"
   },
   "license": "MIT",
   "repository": {
@@ -21,10 +21,13 @@
   },
   "dependencies": {
     "body-parser": "^1.20.0",
+    "chalk": "^5.0.1",
+    "chokidar": "^3.5.3",
     "express": "^4.18.1",
     "nunjucks": "^3.2.3",
     "rollup": "^2.78.1",
-    "sass": "^1.54.5"
+    "sass": "^1.54.5",
+    "string-replace-middleware": "^1.0.2"
   },
   "devDependencies": {
     "ava": "^4.3.3",
@@ -52,15 +55,18 @@
       ],
       "node/no-unpublished-import": "off",
       "node/no-missing-import": "off"
+    },
+    "parserOptions": {
+      "ecmaVersion": 2022
     }
   },
   "c8": {
+    "100": "false",
     "reporter": [
       "lcovonly",
       "text"
     ],
     "all": "true",
-    "100": "true",
     "exclude": [
       "node_modules/",
       "examples/",

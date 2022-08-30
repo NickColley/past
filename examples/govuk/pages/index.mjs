@@ -22,5 +22,6 @@ export const post = ({ body: { email, password } }) => {
       text: "Enter password",
     });
   }
-  return { errors, errorSummary, email, password };
+  console.log({ email, password });
+  return { errors, errorSummary, email };
 };
