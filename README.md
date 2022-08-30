@@ -17,7 +17,7 @@ echo '<h1>Hello, World</h1>' > pages/index.html
 
 Then run `npx past`.
 
-You will see your page at the URL `http://localhost:3000`.
+You will see your page at the URL [http://localhost:3000](http://localhost:3000).
 
 ## Examples
 
