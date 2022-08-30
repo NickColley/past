@@ -4,8 +4,6 @@ Web framework for people from the past.
 
 [![past latest npm version](https://img.shields.io/npm/v/past.svg)](https://www.npmjs.com/package/past)
 
-> **⚠️✋ Do not use in production: this project is new and may have security and performance issues.**
-
 ## Creating a page
 
 Create a `index.html` HTML file inside a 'pages' folder.
