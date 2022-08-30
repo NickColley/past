@@ -6,9 +6,9 @@ Web framework for people from the past.
 
 > **⚠️✋ Do not use in production: this project is new and may have security and performance issues.**
 
-## Quick start
+## Creating a page
 
-Create a HTML file inside a 'pages' folder.
+Create a `index.html` HTML file inside a 'pages' folder.
 
 ```bash
 mkdir pages
@@ -16,6 +16,8 @@ echo '<h1>Hello, World</h1>' > pages/index.html
 ```
 
 Then run `npx past`.
+
+You will see your page at the URL `http://localhost:3000`.
 
 ## Examples
 
