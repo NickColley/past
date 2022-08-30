@@ -60,7 +60,7 @@ if (environment === "production") {
   );
   const app = await server({ currentDirectory, pagesDirectory, environment });
   app.listen(port, () => {
-    console.log(`Production application started: http://localhost:${port}`);
+    console.log(`Application started: http://localhost:${port}`);
   });
 } else {
   // If already in use use a random port instead.
