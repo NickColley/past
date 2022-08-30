@@ -24,3 +24,4 @@ Use these examples to start or learn from:
 - [Form](./examples/form/) &ndash; simple form with user input that shows a message.
 - [Nunjucks](./examples/nunjucks/) &ndash; simple Nunjucks page with data.
 - [GOV.UK](./examples/govuk/) &ndash; GOV.UK login form with error messages.
+- [Markdown](./examples/markdown/) &ndash; simple markdown document.

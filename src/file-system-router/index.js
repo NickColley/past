@@ -50,6 +50,8 @@ async function fileSystemRouter(rootPathName) {
       routes[routeName].css = name;
     } else if (extension === ".js" || extension === ".mjs") {
       routes[routeName].controller = name;
+    } else if (extension === ".md") {
+      routes[routeName].markdown = name;
     } else if (extension === ".njk") {
       routes[routeName].template = name;
     } else {

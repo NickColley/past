@@ -11,10 +11,46 @@ async function compileJavaScript(input) {
   return code;
 }
 
+import { unified } from "unified";
+import remarkParse from "remark-parse";
+import remarkRehype from "remark-rehype";
+import rehypeSanitize from "rehype-sanitize";
+import rehypeStringify from "rehype-stringify";
+import { readFile } from "node:fs/promises";
+
+async function compileMarkdown(filePath) {
+  const contents = await readFile(filePath);
+  const file = await unified()
+    .use(remarkParse)
+    .use(remarkRehype)
+    .use(rehypeSanitize)
+    .use(rehypeStringify)
+    .process(String(contents));
+
+  return String(file);
+}
+
+function wrapHTMLDocument(contents) {
+  return `<!DOCTYPE html>
+<html>
+<body>
+${contents}
+</body>
+</html>`;
+}
+
 function registerRoutes(app, routes, filePath, environment) {
   Object.keys(routes).forEach(async (route) => {
-    const { path, file, controller, template, javascript, scss, css } =
-      routes[route];
+    const {
+      path,
+      file,
+      controller,
+      template,
+      javascript,
+      scss,
+      css,
+      markdown,
+    } = routes[route];
     let controllers = {};
     if (controller) {
       let importPath = join(path, controller);
@@ -33,7 +69,7 @@ function registerRoutes(app, routes, filePath, environment) {
       } route at "${route}"`
     );
     console.time(registeredLog);
-    app.all(route, (request, response, next) => {
+    app.all(route, async (request, response, next) => {
       const { method } = request;
 
       let locals = {};
@@ -63,6 +99,17 @@ function registerRoutes(app, routes, filePath, environment) {
 
       if (template) {
         return response.render(join(path, template), locals);
+      }
+      if (markdown) {
+        const compilingMarkdownLog = chalk.green(
+          `Built Markdown "${join(path.replace(filePath, ""), markdown)}"`
+        );
+        console.time(compilingMarkdownLog);
+        const contents = await compileMarkdown(join(path, markdown));
+        const html = wrapHTMLDocument(contents);
+        console.timeEnd(compilingMarkdownLog);
+        response.setHeader("content-type", "text/html");
+        return response.send(html);
       }
       if (file) {
         return response.sendFile(join(path, file));

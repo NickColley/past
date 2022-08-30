@@ -1,0 +1,12 @@
+{
+  "private": "true",
+  "name": "example-markdown",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "past",
+    "start": "past --env=production"
+  },
+  "dependencies": {
+    "past": "latest"
+  }
+}
