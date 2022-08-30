@@ -11,7 +11,7 @@ import liveReload from "./live-reload/index.mjs";
 import registerRoutes from "./register-routes/index.js";
 import handleNoPages from "./handle-no-pages/index.js";
 
-import { PAGES_DIRECTORY } from "./constants.js";
+import { PAGES_DIRECTORY, NODE_ENV } from "./constants.js";
 
 async function main({ currentDirectory = ".", pagesDirectory = "." } = {}) {
   const app = express();
@@ -23,12 +23,15 @@ async function main({ currentDirectory = ".", pagesDirectory = "." } = {}) {
     throwOnUndefined: false,
     trimBlocks: true,
     lstripBlocks: true,
-    noCache: true, // TODO set depending on environment
+    noCache: NODE_ENV === "development",
     express: app,
   });
   try {
     console.log(chalk.yellow(`\nLooking for files in "${pagesDirectory}"...`));
-    await access(filePath);
+    await access(join(filePath));
+    const routes = await fileSystemRouter(join(filePath, PAGES_DIRECTORY));
+    liveReload(app);
+    registerRoutes(app, routes, filePath);
   } catch (error) {
     if (error.code === "ENOENT") {
       handleNoPages(app, error);
@@ -36,10 +39,6 @@ async function main({ currentDirectory = ".", pagesDirectory = "." } = {}) {
       throw error;
     }
   }
-
-  const routes = await fileSystemRouter(join(filePath, PAGES_DIRECTORY));
-  liveReload(app);
-  registerRoutes(app, routes, filePath);
 
   return app;
 }

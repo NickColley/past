@@ -3,7 +3,15 @@ import { join } from "node:path";
 import chalk from "chalk";
 import sass from "sass";
 import { rollup } from "rollup";
-const cacheImports = false;
+
+import { NODE_ENV } from "../constants.js";
+
+async function compileJavaScript(input) {
+  const bundle = await rollup({ input });
+  const output = await bundle.generate({});
+  const { code } = output.output[0];
+  return code;
+}
 
 function registerRoutes(app, routes, filePath) {
   Object.keys(routes).forEach(async (route) => {
@@ -12,7 +20,7 @@ function registerRoutes(app, routes, filePath) {
     let controllers = {};
     if (controller) {
       let importPath = join(path, controller);
-      if (!cacheImports) {
+      if (NODE_ENV === "development") {
         importPath = importPath + "?update=" + Date.now();
       }
       const { default: defaultGet, get, post } = await import(importPath); // eslint-disable-line
@@ -29,7 +37,6 @@ function registerRoutes(app, routes, filePath) {
     console.time(registeredLog);
     app.all(route, (request, response, next) => {
       const { method } = request;
-      // TODO: Auto escape?
       const locals = controllers[method]
         ? controllers[method]({
             params: request.params,
@@ -49,17 +56,12 @@ function registerRoutes(app, routes, filePath) {
       }
       next();
     });
-    // TODO: Maybe something like webpack/parcel is better for this?
     if (javascript) {
       const compilingJsLog = chalk.green(
         `Built JavaScript "${join(path.replace(filePath, ""), javascript)}"`
       );
       console.time(compilingJsLog);
-      const bundle = await rollup({
-        input: join(path, javascript),
-      });
-      const output = await bundle.generate({});
-      const { code } = output.output[0];
+      const code = await compileJavaScript(join(path, javascript));
       console.timeEnd(compilingJsLog);
       app.get(join(route, javascript), (request, response) => {
         response.setHeader("content-type", "text/javascript");
@@ -78,8 +80,8 @@ function registerRoutes(app, routes, filePath) {
       );
       console.time(compilingSassLog);
       const { css } = sass.compile(join(path, scss), {
-        loadPaths: [join(path, "..", "node_modules")], // TODO: Configurable...
-        quietDeps: true, // TODO: make this configureable? stop dependencies from warning
+        loadPaths: [join(path, "..", "node_modules")],
+        quietDeps: true, // Stop node_module dependencies from displaying noisy warnings
       });
       console.timeEnd(compilingSassLog);
       const transformedScssPath = scss.replace(".scss", ".css");

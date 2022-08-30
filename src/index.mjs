@@ -3,29 +3,42 @@ import chalk from "chalk";
 import chokidar from "chokidar";
 
 import server from "./server.mjs";
+import { NODE_ENV } from "./constants.js";
 
 const { argv } = process;
 const pagesDirectory = argv[2] || ".";
 
 const currentDirectory = process.cwd();
-const port = 3000;
+const port = process.env.PORT || 3000;
+
+const app = await server({ currentDirectory, pagesDirectory });
 
 const state = {
   server: null,
   sockets: [],
 };
 
+if (NODE_ENV === "production") {
+  app.listen(port, () => {
+    console.log(
+      chalk.blueBright(
+        "Application started: " + chalk.underline(`http://localhost:${port}`)
+      )
+    );
+  });
+} else {
+  // Development server with file watching and reloading.
+  start();
+}
+
 async function start() {
-  state.server = (await server({ currentDirectory, pagesDirectory })).listen(
-    3000,
-    () => {
-      console.log(
-        chalk.blueBright(
-          "Application started: " + chalk.underline(`http://localhost:${port}`)
-        )
-      );
-    }
-  );
+  state.server = app.listen(port, () => {
+    console.log(
+      chalk.blueBright(
+        "Application started: " + chalk.underline(`http://localhost:${port}`)
+      )
+    );
+  });
   state.server.on("connection", (socket) => {
     state.sockets.push(socket);
   });
@@ -53,5 +66,3 @@ chokidar
     console.log(chalk.blueBright(`File ${file} changed`));
     restart();
   });
-
-start();
