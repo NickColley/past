@@ -1,16 +1,42 @@
-import { join } from "node:path";
+import { join, dirname } from "node:path";
+import { readFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+
+import { Command } from "commander";
 import chalk from "chalk";
 import chokidar from "chokidar";
 import getPort from "get-port";
 
 import server from "./server.mjs";
-import { NODE_ENV } from "./constants.js";
 
-const { argv } = process;
-const pagesDirectory = argv[2] || ".";
-
+const __dirname = dirname(fileURLToPath(import.meta.url));
 const currentDirectory = process.cwd();
-let port = process.env.PORT || 3000;
+
+const packageJson = JSON.parse(
+  await readFile(join(__dirname, "..", "package.json"))
+);
+
+let pagesDirectory = ".";
+let environment = "development";
+let port = 3000;
+
+const program = new Command(packageJson.name)
+  .version(packageJson.version)
+  .option("-p, --pages <string>", "Pages directory", pagesDirectory)
+  .option("-o, --port <number>", "Port to run the server", port)
+  .option("-e, --environment <string>", "Server environment", environment)
+  .showHelpAfterError()
+  .on("--help", console.log)
+  .parse(process.argv);
+
+const options = program.opts();
+
+if (options.port) {
+  port = parseInt(options.port, 10);
+}
+if (options.pages) {
+  pagesDirectory = options.pages;
+}
 
 const app = await server({ currentDirectory, pagesDirectory });
 
@@ -19,7 +45,7 @@ const state = {
   sockets: [],
 };
 
-if (NODE_ENV === "production") {
+if (environment === "production") {
   app.listen(port, () => {
     console.log(
       chalk.blueBright(
@@ -61,6 +87,7 @@ function restart() {
   });
 }
 
+console.log(chalk.yellow(`Watching files for changes in "${pagesDirectory}".`));
 chokidar
   .watch(pagesDirectory, {
     ignored: [join(pagesDirectory, "node_modules")],
