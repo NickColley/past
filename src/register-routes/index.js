@@ -4,8 +4,6 @@ import chalk from "chalk";
 import sass from "sass";
 import { rollup } from "rollup";
 
-import { NODE_ENV } from "../constants.js";
-
 async function compileJavaScript(input) {
   const bundle = await rollup({ input });
   const output = await bundle.generate({});
@@ -13,14 +11,14 @@ async function compileJavaScript(input) {
   return code;
 }
 
-function registerRoutes(app, routes, filePath) {
+function registerRoutes(app, routes, filePath, environment) {
   Object.keys(routes).forEach(async (route) => {
     const { path, file, controller, template, javascript, scss, css } =
       routes[route];
     let controllers = {};
     if (controller) {
       let importPath = join(path, controller);
-      if (NODE_ENV === "development") {
+      if (environment === "development") {
         importPath = importPath + "?update=" + Date.now();
       }
       const { default: defaultGet, get, post } = await import(importPath); // eslint-disable-line

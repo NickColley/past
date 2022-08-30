@@ -17,14 +17,14 @@ const packageJson = JSON.parse(
 );
 
 let pagesDirectory = ".";
-let environment = "development";
+let environment = process.env.NODE_ENV || "development";
 let port = 3000;
 
 const program = new Command(packageJson.name)
   .version(packageJson.version)
   .option("-p, --pages <string>", "Pages directory", pagesDirectory)
   .option("-o, --port <number>", "Port to run the server", port)
-  .option("-e, --environment <string>", "Server environment", environment)
+  .option("-e, --env <string>", "Server environment", environment)
   .showHelpAfterError()
   .on("--help", console.log)
   .parse(process.argv);
@@ -37,8 +37,11 @@ if (options.port) {
 if (options.pages) {
   pagesDirectory = options.pages;
 }
+if (options.env) {
+  environment = options.env;
+}
 
-const app = await server({ currentDirectory, pagesDirectory });
+const app = await server({ currentDirectory, pagesDirectory, environment });
 
 const state = {
   server: null,
@@ -49,7 +52,8 @@ if (environment === "production") {
   app.listen(port, () => {
     console.log(
       chalk.blueBright(
-        "Application started: " + chalk.underline(`http://localhost:${port}`)
+        "Production application started: " +
+          chalk.underline(`http://localhost:${port}`)
       )
     );
   });
@@ -64,7 +68,8 @@ async function start() {
   state.server = app.listen(port, () => {
     console.log(
       chalk.blueBright(
-        "Application started: " + chalk.underline(`http://localhost:${port}`)
+        "Development application started: " +
+          chalk.underline(`http://localhost:${port}`)
       )
     );
   });
