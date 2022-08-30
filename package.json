@@ -1,18 +1,19 @@
 {
   "name": "past",
-  "version": "0.0.15",
+  "version": "0.0.0-development",
   "type": "module",
   "description": "Next.js inspired opinionated framework focusing on the boring past",
   "bin": "bin/past.cjs",
   "scripts": {
     "test": "npm run lint && npm run ava",
     "ava": "NODE_OPTIONS='--no-warnings --loader=esmock' c8 ava",
-    "lint": "eslint src/**/*.mjs src/**/*.js bin/past.cjs && prettier --check src/**/*.mjs src/**/*.js bin/past.cjs"
+    "lint": "eslint src/**/*.mjs src/**/*.js bin/past.cjs && prettier --check src/**/*.mjs src/**/*.js bin/past.cjs",
+    "semantic-release": "semantic-release"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/NickColley/past.git"
+    "url": "https://github.com/NickColley/past.git"
   },
   "homepage": "https://github.com/NickColley/past#readme",
   "engines": {
@@ -41,7 +42,8 @@
     "eslint-plugin-prettier": "^4.2.1",
     "esmock": "^1.9.7",
     "memfs": "^3.4.7",
-    "prettier": "^2.7.1"
+    "prettier": "^2.7.1",
+    "semantic-release": "^19.0.5"
   },
   "eslintConfig": {
     "extends": [
