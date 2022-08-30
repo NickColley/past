@@ -59,6 +59,12 @@ const state = {
 };
 
 if (environment === "production") {
+  console.log(
+    chalk.black.bgRedBright("Warning:") +
+      chalk.redBright.bold(
+        " past is new and untested in production. It likely has security and performance issues."
+      )
+  );
   app.listen(port, () => {
     console.log(
       chalk.blueBright(
