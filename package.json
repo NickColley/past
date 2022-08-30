@@ -7,7 +7,7 @@
   "scripts": {
     "test": "npm run lint && npm run ava",
     "ava": "NODE_OPTIONS='--no-warnings --loader=esmock' c8 ava",
-    "lint": "eslint *.mjs *.js *.cjs && prettier --check *.mjs *.js *.cjs"
+    "lint": "eslint src/**/*.mjs src/**/*.js bin/past.cjs && prettier --check src/**/*.mjs src/**/*.js bin/past.cjs"
   },
   "license": "MIT",
   "repository": {

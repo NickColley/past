@@ -1,5 +1,7 @@
-import { join } from "node:path";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import { access } from "node:fs/promises";
+
 import express from "express";
 import bodyParser from "body-parser";
 import chalk from "chalk";
@@ -11,6 +13,7 @@ import fileSystemRouter from "./file-system-router.js";
 
 const PAGES_DIRECTORY = "pages";
 const cacheImports = false;
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const formatErrorLog = (message, path) => {
   return (
@@ -61,6 +64,7 @@ function registerRoutes(app, routes, filePath) {
           })
         : {};
       if (template) {
+        response.setHeader("content-type", "text/html");
         return response.render(join(path, template), locals);
       }
       if (file) {
@@ -114,6 +118,27 @@ function registerRoutes(app, routes, filePath) {
   });
 }
 
+function liveReload(app) {
+  app.get("/__live-reload__", (request, response) => {
+    response.set({
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      Connection: "keep-alive",
+    });
+    response.flushHeaders();
+    // Send an initial event to establish a connection
+    response.write(`data: hello\n\n`);
+  });
+  app.get("/__live-reload__/client.js", (request, response) => {
+    response.sendFile(join(__dirname, "live-reload.client.js"));
+  });
+  app.use(
+    stringReplace({
+      "</body>": `<script src="/__live-reload__/client.js"></script>\n</body>`,
+    })
+  );
+}
+
 async function main({ currentDirectory = ".", pagesDirectory = "." } = {}) {
   const app = express();
   app.use(bodyParser.urlencoded({ extended: true }));
@@ -131,6 +156,7 @@ async function main({ currentDirectory = ".", pagesDirectory = "." } = {}) {
     console.log(chalk.yellow(`\nLooking for files in "${pagesDirectory}"...`));
     await access(filePath);
     const routes = await fileSystemRouter(join(filePath, PAGES_DIRECTORY));
+    liveReload(app);
     registerRoutes(app, routes, filePath);
   } catch (error) {
     if (error.code === "ENOENT") {
@@ -139,26 +165,6 @@ async function main({ currentDirectory = ".", pagesDirectory = "." } = {}) {
       throw error;
     }
   }
-
-  // Live reload
-  app.get("/__live-reload__", (request, response) => {
-    response.set({
-      "Content-Type": "text/event-stream",
-      "Cache-Control": "no-cache",
-      Connection: "keep-alive",
-    });
-    response.flushHeaders();
-    // Send an initial event to establish a connection
-    response.write(`data: hello\n\n`);
-  });
-  app.get("/__live-reload__/client.js", (request, response) => {
-    response.sendFile(join(currentDirectory, "live-reload.client.js"));
-  });
-  app.use(
-    stringReplace({
-      "</body>": `<script src="/__live-reload__/client.js"></script>\n</body>`,
-    })
-  );
 
   return { server: app };
 }

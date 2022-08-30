@@ -1,5 +1,3 @@
-export default () => {
-  return {
-    number: Math.random() * 10,
-  };
-};
+export default () => ({
+  number: (Math.random() * 100).toFixed(10),
+});
