@@ -5,7 +5,7 @@
 var fs = require("fs");
 var path = require("path");
 
-fs.readFile(path.join(__dirname, "./.nvmrc"), "utf8", function (error, data) {
+fs.readFile(path.join(__dirname, "../.nvmrc"), "utf8", function (error, data) {
   if (error) {
     throw error;
   }
@@ -20,7 +20,7 @@ fs.readFile(path.join(__dirname, "./.nvmrc"), "utf8", function (error, data) {
 
   if (currentVersionMajor >= expectedVersionMajor) {
     // eslint-disable-next-line node/no-unsupported-features/es-syntax
-    return import("./index.mjs");
+    return import("../src/index.mjs");
   }
 
   console.log(

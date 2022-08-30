@@ -3,7 +3,7 @@
   "version": "0.0.11",
   "type": "module",
   "description": "Next.js inspired opinionated framework focusing on the boring past",
-  "bin": "cli.cjs",
+  "bin": "bin/past.cjs",
   "scripts": {
     "test": "npm run lint && npm run ava",
     "ava": "NODE_OPTIONS='--no-warnings --loader=esmock' c8 ava",
