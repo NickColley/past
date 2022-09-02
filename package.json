@@ -2,7 +2,7 @@
   "name": "past",
   "version": "0.0.0-development",
   "type": "module",
-  "description": "Next.js inspired opinionated framework focusing on the boring past",
+  "description": "Web framework from the past",
   "bin": "bin/past.cjs",
   "scripts": {
     "test": "npm run lint && npm run ava",

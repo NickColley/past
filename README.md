@@ -1,6 +1,6 @@
 # 🌐 past
 
-Web framework for people from the past.
+Web framework from the past.
 
 [![past latest npm version](https://img.shields.io/npm/v/past.svg)](https://www.npmjs.com/package/past)
 
