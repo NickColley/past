@@ -47,12 +47,13 @@ async function main({
     noCache: environment === "development",
     express: app,
   });
+  let events;
   try {
     console.log(chalk.yellow(`\nLooking for files in "${pagesDirectory}"...`));
     await access(join(filePath));
     const routes = await fileSystemRouter(join(filePath, PAGES_DIRECTORY));
     if (environment === "development") {
-      liveReload(app);
+      events = liveReload(app, routes);
     }
     registerRoutes(app, routes, filePath, environment);
   } catch (error) {
@@ -62,8 +63,7 @@ async function main({
       throw error;
     }
   }
-
-  return app;
+  return { app, events };
 }
 
 export default main;

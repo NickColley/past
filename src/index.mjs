@@ -78,7 +78,11 @@ if (environment === "production") {
     })
     .on("change", (file) => {
       console.log(chalk.blueBright(`File ${file} changed`));
-      restart();
+      if (file.endsWith(".css")) {
+        state.events.emit("css", file);
+      } else {
+        restart();
+      }
     });
 }
 
@@ -88,7 +92,12 @@ const state = {
 };
 
 async function start() {
-  const app = await server({ currentDirectory, pagesDirectory, environment });
+  const { app, events } = await server({
+    currentDirectory,
+    pagesDirectory,
+    environment,
+  });
+  state.events = events;
   state.server = app.listen(port, () => {
     console.log(
       chalk.blueBright(
