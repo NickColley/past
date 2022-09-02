@@ -22,6 +22,9 @@ async function main({
 } = {}) {
   const app = express();
 
+  // Serve the public directory
+  app.use(express.static(join(currentDirectory, pagesDirectory, "public")));
+
   // TODO: Figure out best practice for production for sessions.
   app.use(
     session({
