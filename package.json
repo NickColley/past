@@ -49,7 +49,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "esmock": "^1.9.7",
+    "esmock": "^2.0.5",
     "memfs": "^3.4.7",
     "prettier": "^2.7.1",
     "semantic-release": "^19.0.5"
